@@ -1,89 +1,140 @@
 <template>
-  <div class="flight-search">
-    <h1>Any flight worldwide, at your fingertips</h1>
-    <p class="subtitle">Whether it's building booking platforms, visualizing and monitoring global flights or creating
-      popular flight tracking applications — our flight data API is used by thousands every day.</p>
+  <div class="max-w-4xl mx-auto p-6 font-sans">
+    <h1 class="text-3xl font-bold mb-2">Any flight worldwide, at your fingertips</h1>
+    <p class="text-gray-600 mb-6">Whether it's building booking platforms, visualizing and monitoring global flights or
+      creating popular flight tracking applications — our flight data API is used by thousands every day.</p>
 
-    <div class="search-form">
-      <input v-model="airline" placeholder="Airline (e.g. WestJet)">
-      <input v-model="flightNumber" placeholder="Flight Number (e.g. WS5024)">
-      <input type="date" v-model="date">
-      <button @click="searchFlight" class="search-button">SEARCH FLIGHT</button>
+    <div class="flex space-x-4 mb-6">
+      <div class="flex-1 relative">
+        <span class="absolute inset-y-0 left-0 flex items-center pl-3">
+          <svg class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+            <path
+              d="M2.5 4a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm0 4a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm0 4a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm0 4a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zM16.5 4a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm0 4a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm0 4a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm0 4a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z" />
+          </svg>
+        </span>
+        <input v-model="airline" placeholder="Airline (e.g. WestJet)" class="pl-10 pr-4 py-2 w-full border rounded-md">
+      </div>
+      <div class="flex-1 relative">
+        <span class="absolute inset-y-0 left-0 flex items-center pl-3">
+          <svg class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+            <path
+              d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
+          </svg>
+        </span>
+        <input v-model="flightNumber" placeholder="Flight Number (e.g. WS5024)"
+          class="pl-10 pr-4 py-2 w-full border rounded-md">
+      </div>
+      <div class="flex-1 relative">
+        <span class="absolute inset-y-0 left-0 flex items-center pl-3">
+          <svg class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd"
+              d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
+              clip-rule="evenodd" />
+          </svg>
+        </span>
+        <input type="date" v-model="date" class="pl-10 pr-4 py-2 w-full border rounded-md">
+      </div>
+      <button @click="searchFlight"
+        class="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition duration-300">SEARCH
+        FLIGHT</button>
     </div>
 
-    <div v-if="flightInfo" class="flight-info">
-      <h2>{{ flightInfo.flight_iata }}</h2>
-      <p class="airline">{{ flightInfo.airline.name }} ({{ flightInfo.airline.iata }})</p>
-
-      <div class="route-info">
-        <span>{{ flightInfo.departure.iata }} → {{ flightInfo.arrival.iata }}</span>
-        <span class="status">{{ flightInfo.flight_status }}</span>
-      </div>
-
-      <p class="schedule-status">{{ scheduleStatus }}</p>
-
-      <div class="airport-info">
-        <div class="departure">
-          <h3>Departure</h3>
-          <p class="airport-name">{{ flightInfo.departure.airport }}</p>
-          <p class="airport-code">IATA: {{ flightInfo.departure.iata }} • ICAO: {{ flightInfo.departure.icao }}</p>
-
-          <div class="time-info">
-            <div>
-              <p>Scheduled</p>
-              <p>{{ formatDate(flightInfo.departure.scheduled) }}</p>
+    <div v-if="flightInfo" class="bg-white shadow-md rounded-lg overflow-hidden">
+      <div class="p-6">
+        <div class="flex justify-between items-center mb-4">
+          <div>
+            <h2 class="text-2xl font-bold">{{ flightInfo.flight.iata }}</h2>
+            <p class="text-gray-600">{{ flightInfo.airline.name }} ({{ flightInfo.airline.iata }})</p>
+          </div>
+          <div class="bg-green-500 text-white px-4 py-2 rounded-md">
+            <p class="font-bold">{{ flightInfo.flight_status }}</p>
+            <p class="text-sm">On Time</p>
+          </div>
+        </div>
+        <div class="flex justify-between items-center mb-6">
+          <div class="text-center">
+            <p class="text-xl font-bold">{{ flightInfo.departure.iata }}</p>
+            <p class="text-sm text-gray-600">{{ flightInfo.departure.airport }}</p>
+          </div>
+          <svg class="h-6 w-6 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+          </svg>
+          <div class="text-center">
+            <p class="text-xl font-bold">{{ flightInfo.arrival.iata }}</p>
+            <p class="text-sm text-gray-600">{{ flightInfo.arrival.airport }}</p>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-6">
+          <div>
+            <p class="text-gray-500 mb-2">Departure</p>
+            <h3 class="text-lg font-bold mb-1">{{ flightInfo.departure.airport }}</h3>
+            <p class="text-sm text-gray-600 mb-4">IATA: {{ flightInfo.departure.iata }} • ICAO: {{
+              flightInfo.departure.icao }}</p>
+            <div class="grid grid-cols-2 gap-4 text-sm">
+              <div>
+                <p class="font-bold">Scheduled</p>
+                <p>{{ formatDate(flightInfo.departure.scheduled) }}</p>
+              </div>
+              <div>
+                <p class="font-bold">Estimated</p>
+                <p>{{ formatDate(flightInfo.departure.estimated) }}</p>
+              </div>
+              <div>
+                <p class="font-bold">Actual</p>
+                <p>{{ flightInfo.departure.actual || 'N/A' }}</p>
+              </div>
+              <div>
+                <p class="font-bold">Runway</p>
+                <p>{{ flightInfo.departure.actual_runway || 'N/A' }}</p>
+              </div>
             </div>
-            <div>
-              <p>Estimated</p>
-              <p>{{ formatDate(flightInfo.departure.estimated) }}</p>
-            </div>
-            <div>
-              <p>Actual</p>
-              <p>{{ flightInfo.departure.actual || 'N/A' }}</p>
-            </div>
-            <div>
-              <p>Runway</p>
-              <p>{{ flightInfo.departure.actual_runway || 'N/A' }}</p>
+            <div class="mt-4 flex space-x-4">
+              <div class="bg-gray-200 px-3 py-1 rounded">
+                <span class="font-bold">Terminal</span> {{ flightInfo.departure.terminal || 'N/A' }}
+              </div>
+              <div class="bg-gray-200 px-3 py-1 rounded">
+                <span class="font-bold">Gate</span> {{ flightInfo.departure.gate || 'N/A' }}
+              </div>
             </div>
           </div>
-
-          <p class="terminal-gate">Terminal {{ flightInfo.departure.terminal || 'N/A' }}Gate {{
-            flightInfo.departure.gate || 'N/A' }}</p>
-        </div>
-
-        <div class="arrival">
-          <h3>Arrival</h3>
-          <p class="airport-name">{{ flightInfo.arrival.airport }}</p>
-          <p class="airport-code">IATA: {{ flightInfo.arrival.iata }} • ICAO: {{ flightInfo.arrival.icao }}</p>
-
-          <div class="time-info">
-            <div>
-              <p>Scheduled</p>
-              <p>{{ formatDate(flightInfo.arrival.scheduled) }}</p>
+          <div>
+            <p class="text-gray-500 mb-2">Arrival</p>
+            <h3 class="text-lg font-bold mb-1">{{ flightInfo.arrival.airport }}</h3>
+            <p class="text-sm text-gray-600 mb-4">IATA: {{ flightInfo.arrival.iata }} • ICAO: {{ flightInfo.arrival.icao
+              }}</p>
+            <div class="grid grid-cols-2 gap-4 text-sm">
+              <div>
+                <p class="font-bold">Scheduled</p>
+                <p>{{ formatDate(flightInfo.arrival.scheduled) }}</p>
+              </div>
+              <div>
+                <p class="font-bold">Estimated</p>
+                <p>{{ formatDate(flightInfo.arrival.estimated) }}</p>
+              </div>
+              <div>
+                <p class="font-bold">Actual</p>
+                <p>{{ flightInfo.arrival.actual || 'N/A' }}</p>
+              </div>
+              <div>
+                <p class="font-bold">Runway</p>
+                <p>{{ flightInfo.arrival.actual_runway || 'N/A' }}</p>
+              </div>
             </div>
-            <div>
-              <p>Estimated</p>
-              <p>{{ formatDate(flightInfo.arrival.estimated) }}</p>
-            </div>
-            <div>
-              <p>Actual</p>
-              <p>{{ flightInfo.arrival.actual || 'N/A' }}</p>
-            </div>
-            <div>
-              <p>Runway</p>
-              <p>{{ flightInfo.arrival.actual_runway || 'N/A' }}</p>
+            <div class="mt-4 flex space-x-4">
+              <div class="bg-gray-200 px-3 py-1 rounded">
+                <span class="font-bold">Terminal</span> {{ flightInfo.arrival.terminal || 'N/A' }}
+              </div>
+              <div class="bg-gray-200 px-3 py-1 rounded">
+                <span class="font-bold">Gate</span> {{ flightInfo.arrival.gate || 'N/A' }}
+              </div>
             </div>
           </div>
-
-          <p class="terminal-gate">Terminal {{ flightInfo.arrival.terminal || 'N/A' }}Gate {{ flightInfo.arrival.gate ||
-            'N/A' }}</p>
         </div>
       </div>
-
-      <p class="timezone-info">
-        Departure Timezone: {{ flightInfo.departure.timezone }} •
-        Arrival Timezone: {{ flightInfo.arrival.timezone }}
-      </p>
+      <div class="bg-gray-100 px-6 py-4 text-sm text-gray-600">
+        <p>Departure Timezone: {{ flightInfo.departure.timezone }} • Arrival Timezone: {{ flightInfo.arrival.timezone }}
+        </p>
+      </div>
     </div>
   </div>
 </template>
@@ -164,122 +215,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.flight-search {
-  font-family: Arial, sans-serif;
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 20px;
-}
-
-h1 {
-  font-size: 24px;
-  margin-bottom: 10px;
-}
-
-.subtitle {
-  font-size: 14px;
-  color: #666;
-  margin-bottom: 20px;
-}
-
-.search-form {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 20px;
-}
-
-.search-form input,
-.search-form button {
-  padding: 10px;
-  font-size: 14px;
-}
-
-.search-button {
-  background-color: #4a90e2;
-  color: white;
-  border: none;
-  cursor: pointer;
-}
-
-.flight-info {
-  background-color: #f5f5f5;
-  padding: 20px;
-  border-radius: 5px;
-}
-
-h2 {
-  font-size: 24px;
-  margin-bottom: 5px;
-}
-
-.airline {
-  font-size: 16px;
-  color: #666;
-  margin-bottom: 10px;
-}
-
-.route-info {
-  display: flex;
-  justify-content: space-between;
-  font-size: 18px;
-  margin-bottom: 10px;
-}
-
-.status {
-  color: #4a90e2;
-}
-
-.schedule-status {
-  color: #4a90e2;
-  font-weight: bold;
-  margin-bottom: 20px;
-}
-
-.airport-info {
-  display: flex;
-  gap: 40px;
-}
-
-.departure,
-.arrival {
-  flex: 1;
-}
-
-h3 {
-  font-size: 18px;
-  margin-bottom: 10px;
-}
-
-.airport-name {
-  font-weight: bold;
-  margin-bottom: 5px;
-}
-
-.airport-code {
-  color: #666;
-  margin-bottom: 15px;
-}
-
-.time-info {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
-  margin-bottom: 15px;
-}
-
-.time-info p:first-child {
-  font-weight: bold;
-}
-
-.terminal-gate {
-  font-weight: bold;
-}
-
-.timezone-info {
-  margin-top: 20px;
-  font-size: 14px;
-  color: #666;
-}
-</style>
