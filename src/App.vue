@@ -1,9 +1,10 @@
 <template>
   <div class="max-w-4xl mx-auto p-6 font-sans">
-    <h1 class="text-3xl font-bold mb-2">Any flight worldwide, at your fingertips</h1>
-    <p class="text-gray-600 mb-6">Whether it's building booking platforms, visualizing and monitoring global flights or
-      creating popular flight tracking applications — our flight data API is used by thousands every day.</p>
+    <h1 class="text-3xl font-bold mb-2">Track Your Journey, Anywhere in the Sky</h1>
+    <p class="text-gray-600 mb-6">From takeoff to touchdown, stay informed about any flight's status, real-time
+      location, and vital details. Perfect for travelers, meeters and greeters, or aviation enthusiasts.</p>
 
+    <!-- search form -->
     <div class="flex space-x-4 mb-6">
       <div class="flex-1 relative">
         <span class="absolute inset-y-0 left-0 flex items-center pl-3">
@@ -38,102 +39,123 @@
         FLIGHT</button>
     </div>
 
-    <div v-if="flightInfo" class="bg-white shadow-md rounded-lg overflow-hidden">
-      <div class="p-6">
-        <div class="flex justify-between items-center mb-4">
-          <div>
-            <h2 class="text-2xl font-bold">{{ flightInfo.flight.iata }}</h2>
-            <p class="text-gray-600">{{ flightInfo.airline.name }} ({{ flightInfo.airline.iata }})</p>
+    <div v-if="flights.length > 0" class="mt-6">
+      <div v-for="(flight, index) in flights" :key="index" class="bg-white shadow-md rounded-lg overflow-hidden mb-4">
+        <div class="p-6">
+          <div class="flex justify-between items-center mb-4">
+            <div>
+              <h2 class="text-2xl font-bold">{{ flight.flight.iata }}</h2>
+              <p class="text-gray-600">{{ flight.airline.name }} ({{ flight.airline.iata }})</p>
+              <p class="text-sm text-gray-500">Flight Date: {{ formatDate(flight.flight_date) }}</p>
+            </div>
+            <div :class="getStatusClass(flight.flight_status)" class="px-4 py-2 rounded-md text-center">
+              <p class="font-bold">{{ flight.flight_status }}</p>
+              <p class="text-sm">{{ getStatusMessage(flight.flight_status) }}</p>
+            </div>
           </div>
-          <div class="bg-green-500 text-white px-4 py-2 rounded-md text-center">
-            <p class="font-bold">{{ flightInfo.flight_status }}</p>
-            <p class="text-sm">{{ statusMessage }}</p>
+
+          <!-- Detailed flight information -->
+          <div class="flex justify-between items-center mb-6">
+            <div class="text-center">
+              <p class="text-xl font-bold">{{ flight.departure.iata }}</p>
+              <p class="text-sm text-gray-600">{{ flight.departure.airport }}</p>
+            </div>
+            <svg class="h-6 w-6 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
+            <div class="text-center">
+              <p class="text-xl font-bold">{{ flight.arrival.iata }}</p>
+              <p class="text-sm text-gray-600">{{ flight.arrival.airport }}</p>
+            </div>
+          </div>
+          <div class="grid grid-cols-2 gap-6">
+            <div>
+              <p class="text-gray-500 mb-2">Departure</p>
+              <h3 class="text-lg font-bold mb-1">{{ flight.departure.airport }}</h3>
+              <p class="text-sm text-gray-600 mb-4">IATA: {{ flight.departure.iata }} • ICAO: {{ flight.departure.icao
+                }}</p>
+              <div class="grid grid-cols-2 gap-4 text-sm">
+                <div>
+                  <p class="font-bold">Scheduled</p>
+                  <p>{{ formatDate(flight.departure.scheduled) }}</p>
+                </div>
+                <div>
+                  <p class="font-bold">Estimated</p>
+                  <p>{{ formatDate(flight.departure.estimated) }}</p>
+                </div>
+                <div>
+                  <p class="font-bold">Actual</p>
+                  <p>{{ formatDate(flight.departure.actual) || 'N/A' }}</p>
+                </div>
+                <div>
+                  <p class="font-bold">Runway</p>
+                  <p>{{ formatDate(flight.departure.actual_runway) || 'N/A' }}</p>
+                </div>
+              </div>
+              <div class="mt-4 flex space-x-4">
+                <div class="bg-gray-200 px-3 py-1 rounded">
+                  <span class="font-bold">Terminal</span> {{ flight.departure.terminal || 'N/A' }}
+                </div>
+                <div class="bg-gray-200 px-3 py-1 rounded">
+                  <span class="font-bold">Gate</span> {{ flight.departure.gate || 'N/A' }}
+                </div>
+              </div>
+            </div>
+            <div>
+              <p class="text-gray-500 mb-2">Arrival</p>
+              <h3 class="text-lg font-bold mb-1">{{ flight.arrival.airport }}</h3>
+              <p class="text-sm text-gray-600 mb-4">IATA: {{ flight.arrival.iata }} • ICAO: {{ flight.arrival.icao }}
+              </p>
+              <div class="grid grid-cols-2 gap-4 text-sm">
+                <div>
+                  <p class="font-bold">Scheduled</p>
+                  <p>{{ formatDate(flight.arrival.scheduled) }}</p>
+                </div>
+                <div>
+                  <p class="font-bold">Estimated</p>
+                  <p>{{ formatDate(flight.arrival.estimated) }}</p>
+                </div>
+                <div>
+                  <p class="font-bold">Actual</p>
+                  <p>{{ formatDate(flight.arrival.actual) || 'N/A' }}</p>
+                </div>
+                <div>
+                  <p class="font-bold">Runway</p>
+                  <p>{{ formatDate(flight.arrival.actual_runway) || 'N/A' }}</p>
+                </div>
+              </div>
+              <div class="mt-4 flex space-x-4">
+                <div class="bg-gray-200 px-3 py-1 rounded">
+                  <span class="font-bold">Terminal</span> {{ flight.arrival.terminal || 'N/A' }}
+                </div>
+                <div class="bg-gray-200 px-3 py-1 rounded">
+                  <span class="font-bold">Gate</span> {{ flight.arrival.gate || 'N/A' }}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-        <div class="flex justify-between items-center mb-6">
-          <div class="text-center">
-            <p class="text-xl font-bold">{{ flightInfo.departure.iata }}</p>
-            <p class="text-sm text-gray-600">{{ flightInfo.departure.airport }}</p>
-          </div>
-          <svg class="h-6 w-6 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-          </svg>
-          <div class="text-center">
-            <p class="text-xl font-bold">{{ flightInfo.arrival.iata }}</p>
-            <p class="text-sm text-gray-600">{{ flightInfo.arrival.airport }}</p>
-          </div>
-        </div>
-        <div class="grid grid-cols-2 gap-6">
-          <div>
-            <p class="text-gray-500 mb-2">Departure</p>
-            <h3 class="text-lg font-bold mb-1">{{ flightInfo.departure.airport }}</h3>
-            <p class="text-sm text-gray-600 mb-4">IATA: {{ flightInfo.departure.iata }} • ICAO: {{
-              flightInfo.departure.icao }}</p>
-            <div class="grid grid-cols-2 gap-4 text-sm">
-              <div>
-                <p class="font-bold">Scheduled</p>
-                <p>{{ formatDate(flightInfo.departure.scheduled) }}</p>
-              </div>
-              <div>
-                <p class="font-bold">Estimated</p>
-                <p>{{ formatDate(flightInfo.departure.estimated) }}</p>
-              </div>
-              <div>
-                <p class="font-bold">Actual</p>
-                <p>{{ formatDate(flightInfo.departure.actual) || 'N/A' }}</p>
-              </div>
-              <div>
-                <p class="font-bold">Runway</p>
-                <p>{{ formatDate(flightInfo.departure.actual_runway) || 'N/A' }}</p>
-              </div>
-            </div>
-            <div class="mt-4 flex space-x-4">
-              <div class="bg-gray-200 px-3 py-1 rounded">
-                <span class="font-bold">Terminal</span> {{ flightInfo.departure.terminal || 'N/A' }}
-              </div>
-              <div class="bg-gray-200 px-3 py-1 rounded">
-                <span class="font-bold">Gate</span> {{ flightInfo.departure.gate || 'N/A' }}
-              </div>
-            </div>
-          </div>
-          <div>
-            <p class="text-gray-500 mb-2">Arrival</p>
-            <h3 class="text-lg font-bold mb-1">{{ flightInfo.arrival.airport }}</h3>
-            <p class="text-sm text-gray-600 mb-4">IATA: {{ flightInfo.arrival.iata }} • ICAO: {{ flightInfo.arrival.icao
-              }}</p>
-            <div class="grid grid-cols-2 gap-4 text-sm">
-              <div>
-                <p class="font-bold">Scheduled</p>
-                <p>{{ formatDate(flightInfo.arrival.scheduled) }}</p>
-              </div>
-              <div>
-                <p class="font-bold">Estimated</p>
-                <p>{{ formatDate(flightInfo.arrival.estimated) }}</p>
-              </div>
-              <div>
-                <p class="font-bold">Actual</p>
-                <p>{{ formatDate(flightInfo.arrival.actual) || 'N/A' }}</p>
-              </div>
-              <div>
-                <p class="font-bold">Runway</p>
-                <p>{{ formatDate(flightInfo.arrival.actual_runway) || 'N/A' }}</p>
-              </div>
-            </div>
-            <div class="mt-4 flex space-x-4">
-              <div class="bg-gray-200 px-3 py-1 rounded">
-                <span class="font-bold">Terminal</span> {{ flightInfo.arrival.terminal || 'N/A' }}
-              </div>
-              <div class="bg-gray-200 px-3 py-1 rounded">
-                <span class="font-bold">Gate</span> {{ flightInfo.arrival.gate || 'N/A' }}
-              </div>
-            </div>
-          </div>
+        <div class="bg-gray-100 px-6 py-4 text-sm text-gray-600">
+          <p>Departure Timezone: {{ flight.departure.timezone }} • Arrival Timezone: {{ flight.arrival.timezone }}</p>
         </div>
       </div>
-      <div class="bg-gray-100 px-6 py-4 text-sm text-gray-600">
-        <p>Departure Timezone: {{ flightInfo.departure.timezone }} • Arrival Timezone: {{ flightInfo.arrival.timezone }}
-        </p>
+
+      <!-- Pagination controls -->
+      <div class="flex justify-between items-center mt-4">
+        <button @click="prevPage" :disabled="currentPage === 1"
+          class="bg-blue-500 text-white px-4 py-2 rounded disabled:bg-gray-300">
+          Previous
+        </button>
+        <span>Page {{ currentPage }} of {{ totalPages }}</span>
+        <button @click="nextPage" :disabled="currentPage === totalPages"
+          class="bg-blue-500 text-white px-4 py-2 rounded disabled:bg-gray-300">
+          Next
+        </button>
       </div>
+    </div>
+
+    <div v-else-if="searched" class="mt-6 text-center">
+      No flights found for the given criteria.
     </div>
   </div>
 </template>
@@ -146,45 +168,37 @@ export default {
     return {
       airline: '',
       flightNumber: '',
-      date: new Date().toISOString().split('T')[0], // Set default to today's date
-      flightInfo: null,
-      apiKey: process.env.VUE_APP_AVIATION_STACK_API_KEY
+      date: new Date().toISOString().split('T')[0],
+      flights: [],
+      apiKey: process.env.VUE_APP_AVIATION_STACK_API_KEY,
+      currentPage: 1,
+      totalPages: 1,
+      limit: 10, // Number of results per page
+      searched: false
     };
-  },
-  computed: {
-    statusMessage() {
-      switch (this.flightInfo?.flight_status) {
-        case 'active': return 'On Time';
-        case 'scheduled': return 'On Schedule';
-        case 'landed': return 'On Time';
-        case 'cancelled': return 'Cancelled';
-        default: return '';
-      }
-    }
   },
   methods: {
     async searchFlight() {
+      this.searched = true;
       try {
         const response = await axios.get('http://api.aviationstack.com/v1/flights', {
           params: {
             access_key: this.apiKey,
             flight_iata: this.flightNumber,
             airline_name: this.airline,
-            date: this.formatDateForAPI(this.date) // Use the formatted date
+            date: this.formatDateForAPI(this.date),
+            limit: this.limit,
+            offset: (this.currentPage - 1) * this.limit
           }
         });
-        if (response.data.data.length > 0) {
-          this.flightInfo = response.data.data[0];
-        } else {
-          alert('No flight found with the given details.');
-        }
+        this.flights = response.data.data;
+        this.totalPages = Math.ceil(response.data.pagination.total / this.limit);
       } catch (error) {
         console.error('Error fetching flight data:', error);
         alert('An error occurred while fetching flight data.');
       }
     },
     formatDateForAPI(dateString) {
-      // Convert the date to YYYY-MM-DD format for the API
       const date = new Date(dateString);
       return date.toISOString().split('T')[0];
     },
@@ -200,6 +214,36 @@ export default {
         hour12: false,
         timeZone: 'UTC'
       }).replace(',', '');
+    },
+    getStatusClass(status) {
+      switch (status.toLowerCase()) {
+        case 'active': return 'bg-blue-500 text-white';
+        case 'scheduled': return 'bg-yellow-500 text-white';
+        case 'landed': return 'bg-green-600 text-white';
+        case 'cancelled': return 'bg-red-500 text-white';
+        default: return 'bg-gray-500 text-white';
+      }
+    },
+    getStatusMessage(status) {
+      switch (status.toLowerCase()) {
+        case 'active': return 'In Flight';
+        case 'scheduled': return 'On Schedule';
+        case 'landed': return 'Arrived';
+        case 'cancelled': return 'Cancelled';
+        default: return '';
+      }
+    },
+    prevPage() {
+      if (this.currentPage > 1) {
+        this.currentPage--;
+        this.searchFlight();
+      }
+    },
+    nextPage() {
+      if (this.currentPage < this.totalPages) {
+        this.currentPage++;
+        this.searchFlight();
+      }
     }
   }
 };
