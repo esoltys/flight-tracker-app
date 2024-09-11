@@ -146,7 +146,7 @@ export default {
     return {
       airline: '',
       flightNumber: '',
-      date: new Date().toISOString().split('T')[0],
+      date: new Date().toISOString().split('T')[0], // Set default to today's date
       flightInfo: null,
       apiKey: process.env.VUE_APP_AVIATION_STACK_API_KEY
     };
@@ -170,7 +170,7 @@ export default {
             access_key: this.apiKey,
             flight_iata: this.flightNumber,
             airline_name: this.airline,
-            date: this.date
+            date: this.formatDateForAPI(this.date) // Use the formatted date
           }
         });
         if (response.data.data.length > 0) {
@@ -182,6 +182,11 @@ export default {
         console.error('Error fetching flight data:', error);
         alert('An error occurred while fetching flight data.');
       }
+    },
+    formatDateForAPI(dateString) {
+      // Convert the date to YYYY-MM-DD format for the API
+      const date = new Date(dateString);
+      return date.toISOString().split('T')[0];
     },
     formatDate(dateString) {
       if (!dateString) return 'N/A';
