@@ -1,24 +1,75 @@
-# flight-tracker-app
+# Flight Tracker
 
-## Project setup
-```
-npm install
-```
+## Track Your Journey, Anywhere in the Sky
 
-### Compiles and hot-reloads for development
+This Vue.js application allows users to track flights worldwide, providing real-time information about flight status, departure and arrival details, and more.
+
+![screenshot](screenshot.png)
+
+## Features
+
+- Search flights by airline, flight number, and date
+- Display detailed flight information including:
+  - Flight status (e.g., scheduled, active, landed, cancelled)
+  - Departure and arrival airport details
+  - Scheduled, estimated, and actual times
+  - Terminal and gate information
+- Pagination for multiple flight results
+- Responsive design using Tailwind CSS
+
+## Prerequisites
+
+Before you begin, ensure you have met the following requirements:
+
+- Node.js (v14.0.0 or later)
+- npm (v6.0.0 or later)
+
+## Installation
+
+1. Clone the repository:
+
+   ```
+   git clone https://github.com/esoltys/flight-tracker.git
+   cd flight-tracker
+   ```
+
+2. Install the dependencies:
+
+   ```
+   npm install
+   ```
+
+3. Create a `.env` file in the root directory and add your AviationStack API key:
+   ```
+   VUE_APP_AVIATION_STACK_API_KEY=your_api_key_here
+   ```
+
+## Usage
+
+To run the application in development mode:
+
 ```
 npm run serve
 ```
 
-### Compiles and minifies for production
+The application will be available at `http://localhost:8080`.
+
+To build the application for production:
+
 ```
 npm run build
 ```
 
-### Lints and fixes files
-```
-npm run lint
-```
+## API Integration
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+This project uses the [AviationStack API](https://aviationstack.com/) to fetch real-time flight data. You'll need to sign up for an API key to use this service.
+
+## License
+
+Distributed under the MIT License. See `LICENSE` for more information.
+
+## Acknowledgements
+
+- [Vue.js](https://vuejs.org/)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [AviationStack API](https://aviationstack.com/)
