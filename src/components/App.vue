@@ -55,6 +55,16 @@
     </div>
 
     <div v-if="!isLoading && flights.length > 0" class="mt-6">
+      <div v-if="usingCachedData" class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-4"
+        role="alert">
+        <p class="font-bold">Your last search was within 5 minutes</p>
+        <p>This information was loaded from cache and may not reflect the most recent updates.</p>
+        <button @click="forceRefresh"
+          class="mt-2 bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded">
+          Refresh Data
+        </button>
+      </div>
+
       <div v-for="(flight, index) in flights" :key="index" class="bg-white shadow-md rounded-lg overflow-hidden mb-4">
         <div class="p-6">
           <div class="flex justify-between items-center mb-4">
@@ -190,13 +200,26 @@ export default {
       totalPages: 1,
       limit: 10, // Number of results per page
       searched: false,
-      isLoading: false
+      isLoading: false,
+      usingCachedData: false
     };
   },
   methods: {
     async searchFlight() {
       this.searched = true;
       this.isLoading = true;
+      this.usingCachedData = false; // Reset the flag
+      const cacheKey = `${this.airline}-${this.flightNumber}-${this.date}-${this.currentPage}`;
+      const cachedData = this.getCachedData(cacheKey);
+
+      if (cachedData) {
+        this.flights = cachedData.data;
+        this.totalPages = cachedData.totalPages;
+        this.usingCachedData = true; // Set the flag when using cached data
+        this.isLoading = false;
+        return;
+      }
+
       try {
         const response = await axios.get('http://api.aviationstack.com/v1/flights', {
           params: {
@@ -210,12 +233,40 @@ export default {
         });
         this.flights = response.data.data;
         this.totalPages = Math.ceil(response.data.pagination.total / this.limit);
+
+        // Cache the results
+        this.cacheData(cacheKey, {
+          data: this.flights,
+          totalPages: this.totalPages
+        });
       } catch (error) {
         console.error('Error fetching flight data:', error);
         alert('An error occurred while fetching flight data.');
       } finally {
         this.isLoading = false;
       }
+    },
+    getCachedData(key) {
+      const cached = localStorage.getItem(key);
+      if (cached) {
+        const { data, timestamp } = JSON.parse(cached);
+        // Check if the cache is less than 5 minutes old
+        if (Date.now() - timestamp < 5 * 60 * 1000) {
+          return data;
+        }
+      }
+      return null;
+    },
+    cacheData(key, data) {
+      localStorage.setItem(key, JSON.stringify({
+        data,
+        timestamp: Date.now()
+      }));
+    },
+    forceRefresh() {
+      const cacheKey = `${this.airline}-${this.flightNumber}-${this.date}-${this.currentPage}`;
+      localStorage.removeItem(cacheKey);
+      this.searchFlight();
     },
     formatDateForAPI(dateString) {
       const date = new Date(dateString);
