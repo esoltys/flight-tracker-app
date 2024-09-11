@@ -16,6 +16,9 @@ This Vue.js application allows users to track flights worldwide, providing real-
   - Terminal and gate information
 - Pagination for multiple flight results
 - Responsive design using Tailwind CSS
+- API response caching for improved performance
+- Visual indicator for cached data usage
+- Option to force refresh cached data
 
 ## Prerequisites
 
@@ -70,6 +73,14 @@ npm run test:unit
 
 This project uses the [AviationStack API](https://aviationstack.com/) to fetch real-time flight data. You'll need to sign up for an API key to use this service.
 
+## Caching
+
+The application implements a simple caching mechanism to improve performance and reduce API calls:
+
+- API responses are cached for 5 minutes
+- A visual indicator is shown when displaying cached data
+- Users can force a refresh of the data, bypassing the cache
+
 ## License
 
 Distributed under the MIT License. See `LICENSE` for more information.
@@ -79,3 +90,4 @@ Distributed under the MIT License. See `LICENSE` for more information.
 - [Vue.js](https://vuejs.org/)
 - [Tailwind CSS](https://tailwindcss.com/)
 - [AviationStack API](https://aviationstack.com/)
+- [Axios](https://axios-http.com/)
