@@ -111,7 +111,7 @@ export default {
       flightNumber: "",
       date: new Date().toISOString().split("T")[0],
       flightInfo: null,
-      apiKey: "YOUR_AVIATIONSTACK_API_KEY", // Replace with your actual API key
+      apiKey: process.env.VUE_APP_AVIATION_STACK_API_KEY
     };
   },
   computed: {
