@@ -60,6 +60,12 @@ To build the application for production:
 npm run build
 ```
 
+To run the Jest test suite:
+
+```
+npm run test:unit
+```
+
 ## API Integration
 
 This project uses the [AviationStack API](https://aviationstack.com/) to fetch real-time flight data. You'll need to sign up for an API key to use this service.
