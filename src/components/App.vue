@@ -13,7 +13,8 @@
               d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z" />
           </svg>
         </span>
-        <input v-model="airline" data-testid="airline-input" placeholder="Airline (e.g. WestJet)" class="pl-10 pr-4 py-2 w-full border rounded-md">
+        <input v-model="airline" data-testid="airline-input" placeholder="Airline (e.g. WestJet)"
+          class="pl-10 pr-4 py-2 w-full border rounded-md">
       </div>
       <div class="flex-1 relative">
         <span class="absolute inset-y-0 left-0 flex items-center pl-3">
@@ -22,7 +23,8 @@
               d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
           </svg>
         </span>
-        <input v-model="flightNumber" data-testid="flight-number-input" placeholder="Flight Number (e.g. WS3041)" class="pl-10 pr-4 py-2 w-full border rounded-md">
+        <input v-model="flightNumber" data-testid="flight-number-input" placeholder="Flight Number (e.g. WS3041)"
+          class="pl-10 pr-4 py-2 w-full border rounded-md">
       </div>
       <div class="flex-1 relative">
         <span class="absolute inset-y-0 left-0 flex items-center pl-3">
@@ -39,7 +41,22 @@
         FLIGHT</button>
     </div>
 
-    <div v-if="flights.length > 0" class="mt-6">
+    <div v-if="isLoading" class="flex justify-center items-center my-8">
+      <svg class="animate-spin h-20 w-20 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none"
+        viewBox="0 0 24 24">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+        <path class="opacity-75" fill="currentColor"
+          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+        </path>
+        <path fill="currentColor" d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5-10-5-10 5z" />
+        <path fill="currentColor" d="M12 22.5L2 17.5V7.5l10 5v10z" />
+        <path fill="currentColor" d="M12 22.5l10-5V7.5l-10 5v10z" />
+        <path fill="currentColor" d="M12 12l-10-5 10-5 10 5-10 5z" />
+      </svg>
+    </div>
+
+
+    <div v-if="!isLoading && flights.length > 0" class="mt-6">
       <div v-for="(flight, index) in flights" :key="index" class="bg-white shadow-md rounded-lg overflow-hidden mb-4">
         <div class="p-6">
           <div class="flex justify-between items-center mb-4">
@@ -154,7 +171,7 @@
       </div>
     </div>
 
-    <div v-else-if="searched" class="mt-6 text-center">
+    <div v-else-if="!isLoading && searched" class="mt-6 text-center">
       No flights found for the given criteria.
     </div>
   </div>
@@ -174,12 +191,14 @@ export default {
       currentPage: 1,
       totalPages: 1,
       limit: 10, // Number of results per page
-      searched: false
+      searched: false,
+      isLoading: false
     };
   },
   methods: {
     async searchFlight() {
       this.searched = true;
+      this.isLoading = true;
       try {
         const response = await axios.get('http://api.aviationstack.com/v1/flights', {
           params: {
@@ -196,6 +215,8 @@ export default {
       } catch (error) {
         console.error('Error fetching flight data:', error);
         alert('An error occurred while fetching flight data.');
+      } finally {
+        this.isLoading = false;
       }
     },
     formatDateForAPI(dateString) {
