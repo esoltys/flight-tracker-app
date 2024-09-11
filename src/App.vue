@@ -9,7 +9,7 @@
         <span class="absolute inset-y-0 left-0 flex items-center pl-3">
           <svg class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
             <path
-              d="M2.5 4a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm0 4a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm0 4a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm0 4a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zM16.5 4a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm0 4a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm0 4a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm0 4a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z" />
+              d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z" />
           </svg>
         </span>
         <input v-model="airline" placeholder="Airline (e.g. WestJet)" class="pl-10 pr-4 py-2 w-full border rounded-md">
@@ -21,8 +21,7 @@
               d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
           </svg>
         </span>
-        <input v-model="flightNumber" placeholder="Flight Number (e.g. WS5024)"
-          class="pl-10 pr-4 py-2 w-full border rounded-md">
+        <input v-model="flightNumber" placeholder="WS3041" class="pl-10 pr-4 py-2 w-full border rounded-md">
       </div>
       <div class="flex-1 relative">
         <span class="absolute inset-y-0 left-0 flex items-center pl-3">
@@ -46,9 +45,9 @@
             <h2 class="text-2xl font-bold">{{ flightInfo.flight.iata }}</h2>
             <p class="text-gray-600">{{ flightInfo.airline.name }} ({{ flightInfo.airline.iata }})</p>
           </div>
-          <div class="bg-green-500 text-white px-4 py-2 rounded-md">
+          <div class="bg-green-500 text-white px-4 py-2 rounded-md text-center">
             <p class="font-bold">{{ flightInfo.flight_status }}</p>
-            <p class="text-sm">On Time</p>
+            <p class="text-sm">{{ statusMessage }}</p>
           </div>
         </div>
         <div class="flex justify-between items-center mb-6">
@@ -81,11 +80,11 @@
               </div>
               <div>
                 <p class="font-bold">Actual</p>
-                <p>{{ flightInfo.departure.actual || 'N/A' }}</p>
+                <p>{{ formatDate(flightInfo.departure.actual) || 'N/A' }}</p>
               </div>
               <div>
                 <p class="font-bold">Runway</p>
-                <p>{{ flightInfo.departure.actual_runway || 'N/A' }}</p>
+                <p>{{ formatDate(flightInfo.departure.actual_runway) || 'N/A' }}</p>
               </div>
             </div>
             <div class="mt-4 flex space-x-4">
@@ -113,11 +112,11 @@
               </div>
               <div>
                 <p class="font-bold">Actual</p>
-                <p>{{ flightInfo.arrival.actual || 'N/A' }}</p>
+                <p>{{ formatDate(flightInfo.arrival.actual) || 'N/A' }}</p>
               </div>
               <div>
                 <p class="font-bold">Runway</p>
-                <p>{{ flightInfo.arrival.actual_runway || 'N/A' }}</p>
+                <p>{{ formatDate(flightInfo.arrival.actual_runway) || 'N/A' }}</p>
               </div>
             </div>
             <div class="mt-4 flex space-x-4">
@@ -140,78 +139,63 @@
 </template>
 
 <script>
-import axios from "axios";
+import axios from 'axios';
 
 export default {
   data() {
     return {
-      airline: "",
-      flightNumber: "",
-      date: new Date().toISOString().split("T")[0],
+      airline: '',
+      flightNumber: '',
+      date: new Date().toISOString().split('T')[0],
       flightInfo: null,
       apiKey: process.env.VUE_APP_AVIATION_STACK_API_KEY
     };
   },
   computed: {
-    statusClass() {
-      return {
-        "status-active": this.flightInfo.flight_status === "active",
-        "status-scheduled": this.flightInfo.flight_status === "scheduled",
-        "status-landed": this.flightInfo.flight_status === "landed",
-        "status-cancelled": this.flightInfo.flight_status === "cancelled",
-      };
-    },
     statusMessage() {
-      switch (this.flightInfo.flight_status) {
-        case "active":
-          return "On Time";
-        case "scheduled":
-          return "On Schedule";
-        case "landed":
-          return "Landed";
-        case "cancelled":
-          return "Cancelled";
-        default:
-          return "";
+      switch (this.flightInfo?.flight_status) {
+        case 'active': return 'On Time';
+        case 'scheduled': return 'On Schedule';
+        case 'landed': return 'On Time';
+        case 'cancelled': return 'Cancelled';
+        default: return '';
       }
-    },
+    }
   },
   methods: {
     async searchFlight() {
       try {
-        const response = await axios.get(
-          "http://api.aviationstack.com/v1/flights",
-          {
-            params: {
-              access_key: this.apiKey,
-              flight_iata: this.flightNumber,
-              airline_name: this.airline,
-              date: this.date,
-            },
+        const response = await axios.get('http://api.aviationstack.com/v1/flights', {
+          params: {
+            access_key: this.apiKey,
+            flight_iata: this.flightNumber,
+            airline_name: this.airline,
+            date: this.date
           }
-        );
+        });
         if (response.data.data.length > 0) {
           this.flightInfo = response.data.data[0];
         } else {
-          alert("No flight found with the given details.");
+          alert('No flight found with the given details.');
         }
       } catch (error) {
-        console.error("Error fetching flight data:", error);
-        alert("An error occurred while fetching flight data.");
+        console.error('Error fetching flight data:', error);
+        alert('An error occurred while fetching flight data.');
       }
     },
     formatDate(dateString) {
-      if (!dateString) return "N/A";
+      if (!dateString) return 'N/A';
       const date = new Date(dateString);
-      return date.toLocaleString("en-US", {
-        year: "numeric",
-        month: "2-digit",
-        day: "2-digit",
-        hour: "2-digit",
-        minute: "2-digit",
+      return date.toLocaleString('en-US', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
         hour12: false,
-      });
-    },
-  },
+        timeZone: 'UTC'
+      }).replace(',', '');
+    }
+  }
 };
 </script>
