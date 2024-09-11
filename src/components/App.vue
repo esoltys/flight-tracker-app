@@ -13,7 +13,7 @@
               d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z" />
           </svg>
         </span>
-        <input v-model="airline" placeholder="Airline (e.g. WestJet)" class="pl-10 pr-4 py-2 w-full border rounded-md">
+        <input v-model="airline" data-testid="airline-input" placeholder="Airline (e.g. WestJet)" class="pl-10 pr-4 py-2 w-full border rounded-md">
       </div>
       <div class="flex-1 relative">
         <span class="absolute inset-y-0 left-0 flex items-center pl-3">
@@ -22,7 +22,7 @@
               d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
           </svg>
         </span>
-        <input v-model="flightNumber" placeholder="Flight Number (e.g. WS3041)" class="pl-10 pr-4 py-2 w-full border rounded-md">
+        <input v-model="flightNumber" data-testid="flight-number-input" placeholder="Flight Number (e.g. WS3041)" class="pl-10 pr-4 py-2 w-full border rounded-md">
       </div>
       <div class="flex-1 relative">
         <span class="absolute inset-y-0 left-0 flex items-center pl-3">
@@ -34,7 +34,7 @@
         </span>
         <input type="date" v-model="date" class="pl-10 pr-4 py-2 w-full border rounded-md">
       </div>
-      <button @click="searchFlight"
+      <button @click="searchFlight" data-testid="search-button"
         class="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition duration-300">SEARCH
         FLIGHT</button>
     </div>
