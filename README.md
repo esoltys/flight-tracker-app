@@ -30,8 +30,8 @@ Before you begin, ensure you have met the following requirements:
 1. Clone the repository:
 
    ```
-   git clone https://github.com/esoltys/flight-tracker.git
-   cd flight-tracker
+   git clone https://github.com/esoltys/flight-tracker-app.git
+   cd flight-tracker-app
    ```
 
 2. Install the dependencies:
