@@ -74,22 +74,23 @@
               <p class="text-sm text-gray-500">Flight Date: {{ formatDate(flight.flight_date) }}</p>
             </div>
             <div :class="getStatusClass(flight.flight_status)" class="px-4 py-2 rounded-md text-center">
-              <p class="font-bold">{{ flight.flight_status }}</p>
-              <p class="text-sm">{{ getStatusMessage(flight.flight_status) }}</p>
+              <p class="font-bold">{{ getStatusMessage(flight.flight_status) }}</p>
             </div>
           </div>
 
           <!-- Detailed flight information -->
-          <div class="flex justify-between items-center mb-6">
-            <div class="text-center">
-              <p class="text-xl font-bold">{{ flight.departure.iata }}</p>
+          <div class="flex items-center justify-between mb-6">
+            <div class="text-center flex-1">
+              <p class="text-3xl font-bold">{{ flight.departure.iata }}</p>
               <p class="text-sm text-gray-600">{{ flight.departure.airport }}</p>
             </div>
-            <svg class="h-6 w-6 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-            </svg>
-            <div class="text-center">
-              <p class="text-xl font-bold">{{ flight.arrival.iata }}</p>
+            <div class="flex-shrink-0 mx-4">
+              <svg class="h-6 w-6 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              </svg>
+            </div>
+            <div class="text-center flex-1">
+              <p class="text-3xl font-bold">{{ flight.arrival.iata }}</p>
               <p class="text-sm text-gray-600">{{ flight.arrival.airport }}</p>
             </div>
           </div>
