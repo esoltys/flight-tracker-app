@@ -1,8 +1,6 @@
 # Flight Tracker
 
-## Track Your Journey, Anywhere in the Sky
-
-This Vue.js application allows users to track flights worldwide, providing real-time information about flight status, departure and arrival details, and more.
+Small demo Vue.js application that uses the AviationStack API to show flight status.
 
 ![screenshot](screenshot.png)
 
