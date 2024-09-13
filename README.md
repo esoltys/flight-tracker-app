@@ -71,6 +71,10 @@ npm run test:unit
 
 This project uses the [AviationStack API](https://aviationstack.com/) to fetch real-time flight data. You'll need to sign up for an API key to use this service.
 
+### API Error Message
+
+![](D:\GitHub\flight-tracker-app\screenshot-error.png)
+
 ## Caching
 
 The application implements a simple caching mechanism to improve performance and reduce API calls:

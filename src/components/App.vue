@@ -70,6 +70,12 @@
       </svg>
     </div>
 
+    <!-- Error Message -->
+    <div v-if="errorMessage" class="mt-6 bg-red-100 border-l-4 border-red-500 text-red-700 p-4" role="alert">
+      <p class="font-bold">Error</p>
+      <p>{{ errorMessage }}</p>
+    </div>
+
     <!-- Flight Results -->
     <div v-if="!isLoading && flights.length > 0" class="mt-6">
       <!-- Cached Data Alert -->
@@ -206,7 +212,7 @@
     </div>
 
     <!-- No Results Message -->
-    <div v-else-if="!isLoading && searched" class="mt-6 text-center">
+    <div v-else-if="!isLoading && searched && !errorMessage" class="mt-6 text-center">
       No flights found for the given criteria.
     </div>
   </div>
@@ -229,21 +235,23 @@ export default {
       limit: 10, // Number of results per page
       searched: false,
       isLoading: false,
-      usingCachedData: false
+      usingCachedData: false,
+      errorMessage: '',
     };
   },
   methods: {
     async searchFlight() {
       this.searched = true;
       this.isLoading = true;
-      this.usingCachedData = false; // Reset the flag
+      this.usingCachedData = false;
+      this.errorMessage = ''; // Clear any previous error message
       const cacheKey = `${this.airline}-${this.flightNumber}-${this.date}-${this.currentPage}`;
       const cachedData = this.getCachedData(cacheKey);
 
       if (cachedData) {
         this.flights = cachedData.data;
         this.totalPages = cachedData.totalPages;
-        this.usingCachedData = true; // Set the flag when using cached data
+        this.usingCachedData = true;
         this.isLoading = false;
         return;
       }
@@ -262,14 +270,16 @@ export default {
         this.flights = response.data.data;
         this.totalPages = Math.ceil(response.data.pagination.total / this.limit);
 
-        // Cache the results
         this.cacheData(cacheKey, {
           data: this.flights,
           totalPages: this.totalPages
         });
       } catch (error) {
         console.error('Error fetching flight data:', error);
-        alert('An error occurred while fetching flight data.');
+        this.errorMessage = 'An error occurred while fetching flight data. Please try again later.';
+        if (error.response && error.response.data && error.response.data.error) {
+          this.errorMessage += ` Error details: ${error.response.data.error.message}`;
+        }
       } finally {
         this.isLoading = false;
       }
