@@ -73,7 +73,7 @@ This project uses the [AviationStack API](https://aviationstack.com/) to fetch r
 
 ### API Error Message
 
-![](D:\GitHub\flight-tracker-app\screenshot-error.png)
+![](screenshot-error.png)
 
 ## Caching
 
