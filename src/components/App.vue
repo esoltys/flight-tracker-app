@@ -1,46 +1,62 @@
 <template>
   <div class="max-w-4xl mx-auto p-6 font-sans">
+    <!-- Header -->
     <h1 class="text-3xl font-bold mb-2">Track Your Journey, Anywhere in the Sky</h1>
     <p class="text-gray-600 mb-6">From takeoff to touchdown, stay informed about any flight's status, real-time
       location, and vital details. Perfect for travelers, meeters and greeters, or aviation enthusiasts.</p>
 
-    <!-- search form -->
-    <div class="flex space-x-4 mb-6">
-      <div class="flex-1 relative">
-        <span class="absolute inset-y-0 left-0 flex items-center pl-3">
-          <svg class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
-            <path
-              d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z" />
-          </svg>
-        </span>
-        <input v-model="airline" data-testid="airline-input" placeholder="Airline (e.g. WestJet)"
-          class="pl-10 pr-4 py-2 w-full border rounded-md">
+    <!-- Search Form -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+      <!-- Airline Input -->
+      <div class="flex flex-col">
+        <label for="airline" class="mb-1 font-bold text-sm text-gray-700">Airline</label>
+        <div class="relative">
+          <span class="absolute inset-y-0 left-0 flex items-center pl-3">
+            <svg class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+              <path
+                d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z" />
+            </svg>
+          </span>
+          <input id="airline" v-model="airline" data-testid="airline-input" placeholder="e.g. WestJet"
+            class="pl-10 pr-4 py-2 w-full border rounded-md">
+        </div>
       </div>
-      <div class="flex-1 relative">
-        <span class="absolute inset-y-0 left-0 flex items-center pl-3">
-          <svg class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
-            <path
-              d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
-          </svg>
-        </span>
-        <input v-model="flightNumber" data-testid="flight-number-input" placeholder="Flight Number (e.g. WS3041)"
-          class="pl-10 pr-4 py-2 w-full border rounded-md">
+      <!-- Flight Number Input -->
+      <div class="flex flex-col">
+        <label for="flightNumber" class="mb-1 font-bold text-sm text-gray-700">Flight Number</label>
+        <div class="relative">
+          <span class="absolute inset-y-0 left-0 flex items-center pl-3">
+            <svg class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+              <path
+                d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
+            </svg>
+          </span>
+          <input id="flightNumber" v-model="flightNumber" data-testid="flight-number-input" placeholder="e.g. WS3041"
+            class="pl-10 pr-4 py-2 w-full border rounded-md">
+        </div>
       </div>
-      <div class="flex-1 relative">
-        <span class="absolute inset-y-0 left-0 flex items-center pl-3">
-          <svg class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
-            <path fill-rule="evenodd"
-              d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
-              clip-rule="evenodd" />
-          </svg>
-        </span>
-        <input type="date" v-model="date" class="pl-10 pr-4 py-2 w-full border rounded-md">
+      <!-- Date Input -->
+      <div class="flex flex-col">
+        <label for="date" class="mb-1 font-bold text-sm text-gray-700">Date</label>
+        <div class="relative">
+          <span class="absolute inset-y-0 left-0 flex items-center pl-3">
+            <svg class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd"
+                d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
+                clip-rule="evenodd" />
+            </svg>
+          </span>
+          <input id="date" type="date" v-model="date" class="pl-10 pr-4 py-2 w-full border rounded-md">
+        </div>
       </div>
+      <!-- Search Button -->
       <button @click="searchFlight" data-testid="search-button"
-        class="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition duration-300">SEARCH
-        FLIGHT</button>
+        class="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition duration-300 self-end">
+        SEARCH FLIGHT
+      </button>
     </div>
 
+    <!-- Loading Indicator -->
     <div v-if="isLoading" class="flex justify-center items-center my-8">
       <svg class="h-40 w-40" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
         <circle cx="50" cy="50" r="40" fill="none" stroke="#e0e0e0" stroke-width="2" />
@@ -54,7 +70,9 @@
       </svg>
     </div>
 
+    <!-- Flight Results -->
     <div v-if="!isLoading && flights.length > 0" class="mt-6">
+      <!-- Cached Data Alert -->
       <div v-if="usingCachedData" class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-4"
         role="alert">
         <p class="font-bold">Your last search was within 5 minutes</p>
@@ -65,8 +83,10 @@
         </button>
       </div>
 
+      <!-- Flight Cards -->
       <div v-for="(flight, index) in flights" :key="index" class="bg-white shadow-md rounded-lg overflow-hidden mb-4">
         <div class="p-6">
+          <!-- Flight Header -->
           <div class="flex justify-between items-center mb-4">
             <div>
               <h2 class="text-2xl font-bold">{{ flight.flight.iata }}</h2>
@@ -78,7 +98,7 @@
             </div>
           </div>
 
-          <!-- Detailed flight information -->
+          <!-- Flight Route -->
           <div class="flex items-center justify-between mb-6">
             <div class="text-center flex-1">
               <p class="text-3xl font-bold">{{ flight.departure.iata }}</p>
@@ -94,7 +114,10 @@
               <p class="text-sm text-gray-600">{{ flight.arrival.airport }}</p>
             </div>
           </div>
-          <div class="grid grid-cols-2 gap-6">
+
+          <!-- Detailed Flight Information -->
+          <div class="grid md:grid-cols-2 gap-6">
+            <!-- Departure Details -->
             <div>
               <p class="text-gray-500 mb-2">Departure</p>
               <h3 class="text-lg font-bold mb-1">{{ flight.departure.airport }}</h3>
@@ -127,6 +150,7 @@
                 </div>
               </div>
             </div>
+            <!-- Arrival Details -->
             <div>
               <p class="text-gray-500 mb-2">Arrival</p>
               <h3 class="text-lg font-bold mb-1">{{ flight.arrival.airport }}</h3>
@@ -161,12 +185,13 @@
             </div>
           </div>
         </div>
+        <!-- Flight Timezone Information -->
         <div class="bg-gray-100 px-6 py-4 text-sm text-gray-600">
           <p>Departure Timezone: {{ flight.departure.timezone }} • Arrival Timezone: {{ flight.arrival.timezone }}</p>
         </div>
       </div>
 
-      <!-- Pagination controls -->
+      <!-- Pagination Controls -->
       <div class="flex justify-between items-center mt-4">
         <button @click="prevPage" :disabled="currentPage === 1"
           class="bg-blue-500 text-white px-4 py-2 rounded disabled:bg-gray-300">
@@ -180,11 +205,13 @@
       </div>
     </div>
 
+    <!-- No Results Message -->
     <div v-else-if="!isLoading && searched" class="mt-6 text-center">
       No flights found for the given criteria.
     </div>
   </div>
 </template>
+
 
 <script>
 import axios from 'axios';
