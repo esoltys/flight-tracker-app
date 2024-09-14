@@ -9,7 +9,7 @@
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-6">
       <!-- Airline Input -->
       <div class="flex flex-col">
-        <label for="airline" class="mb-1 font-bold text-sm text-gray-700">Airline</label>
+        <label for="airline" class="mb-2 font-bold text-sm text-gray-700">Airline</label>
         <div class="relative">
           <span class="absolute inset-y-0 left-0 flex items-center pl-3">
             <svg class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
@@ -18,12 +18,12 @@
             </svg>
           </span>
           <input id="airline" v-model="airline" data-testid="airline-input" placeholder="e.g. WestJet"
-            class="pl-10 pr-4 py-2 w-full border rounded-md">
+            class="pl-10 pr-4 py-2 w-full border rounded-md h-10">
         </div>
       </div>
       <!-- Flight Number Input -->
       <div class="flex flex-col">
-        <label for="flightNumber" class="mb-1 font-bold text-sm text-gray-700">Flight Number</label>
+        <label for="flightNumber" class="mb-2 font-bold text-sm text-gray-700">Flight Number</label>
         <div class="relative">
           <span class="absolute inset-y-0 left-0 flex items-center pl-3">
             <svg class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
@@ -32,12 +32,12 @@
             </svg>
           </span>
           <input id="flightNumber" v-model="flightNumber" data-testid="flight-number-input" placeholder="e.g. WS3041"
-            class="pl-10 pr-4 py-2 w-full border rounded-md">
+            class="pl-10 pr-4 py-2 w-full border rounded-md h-10">
         </div>
       </div>
       <!-- Date Input -->
       <div class="flex flex-col">
-        <label for="date" class="mb-1 font-bold text-sm text-gray-700">Date</label>
+        <label for="date" class="mb-2 font-bold text-sm text-gray-700">Date</label>
         <div class="relative">
           <span class="absolute inset-y-0 left-0 flex items-center pl-3">
             <svg class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
@@ -46,14 +46,17 @@
                 clip-rule="evenodd" />
             </svg>
           </span>
-          <input id="date" type="date" v-model="date" class="pl-10 pr-4 py-2 w-full border rounded-md">
+          <input id="date" type="date" v-model="date" class="pl-10 pr-4 py-2 w-full border rounded-md h-10">
         </div>
       </div>
       <!-- Search Button -->
-      <button @click="searchFlight" data-testid="search-button"
-        class="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition duration-300 self-end">
-        SEARCH FLIGHT
-      </button>
+      <div class="flex flex-col">
+        <label class="mb-2 font-bold text-sm text-gray-700 invisible">Search</label>
+        <button @click="searchFlight" data-testid="search-button"
+          class="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition duration-300 h-10">
+          SEARCH FLIGHT
+        </button>
+      </div>
     </div>
 
     <!-- Loading Indicator -->
