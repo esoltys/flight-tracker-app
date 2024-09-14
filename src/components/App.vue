@@ -6,58 +6,60 @@
       location, and vital details. Perfect for travelers, meeters and greeters, or aviation enthusiasts.</p>
 
     <!-- Search Form -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-      <!-- Airline Input -->
-      <div class="flex flex-col">
-        <label for="airline" class="mb-2 font-bold text-sm text-gray-700">Airline</label>
-        <div class="relative">
-          <span class="absolute inset-y-0 left-0 flex items-center pl-3">
-            <svg class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
-              <path
-                d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z" />
-            </svg>
-          </span>
-          <input id="airline" v-model="airline" data-testid="airline-input" placeholder="e.g. WestJet"
-            class="pl-10 pr-4 py-2 w-full border rounded-md h-10">
+    <form @submit.prevent="searchFlight" class="mb-6">
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+        <!-- Airline Input -->
+        <div class="flex flex-col">
+          <label for="airline" class="mb-2 font-bold text-sm text-gray-700">Airline</label>
+          <div class="relative">
+            <span class="absolute inset-y-0 left-0 flex items-center pl-3">
+              <svg class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                <path
+                  d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z" />
+              </svg>
+            </span>
+            <input id="airline" v-model="airline" data-testid="airline-input" placeholder="e.g. WestJet"
+              class="pl-10 pr-4 py-2 w-full border rounded-md h-10">
+          </div>
+        </div>
+        <!-- Flight Number Input -->
+        <div class="flex flex-col">
+          <label for="flightNumber" class="mb-2 font-bold text-sm text-gray-700">Flight Number</label>
+          <div class="relative">
+            <span class="absolute inset-y-0 left-0 flex items-center pl-3">
+              <svg class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                <path
+                  d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
+              </svg>
+            </span>
+            <input id="flightNumber" v-model="flightNumber" data-testid="flight-number-input" placeholder="e.g. WS3041"
+              class="pl-10 pr-4 py-2 w-full border rounded-md h-10">
+          </div>
+        </div>
+        <!-- Date Input -->
+        <div class="flex flex-col">
+          <label for="date" class="mb-2 font-bold text-sm text-gray-700">Date</label>
+          <div class="relative">
+            <span class="absolute inset-y-0 left-0 flex items-center pl-3">
+              <svg class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd"
+                  d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
+                  clip-rule="evenodd" />
+              </svg>
+            </span>
+            <input id="date" type="date" v-model="date" class="pl-10 pr-4 py-2 w-full border rounded-md h-10">
+          </div>
+        </div>
+        <!-- Search Button -->
+        <div class="flex flex-col">
+          <label class="mb-2 font-bold text-sm text-gray-700 invisible">Search</label>
+          <button type="submit" data-testid="search-button"
+            class="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition duration-300 h-10">
+            SEARCH FLIGHT
+          </button>
         </div>
       </div>
-      <!-- Flight Number Input -->
-      <div class="flex flex-col">
-        <label for="flightNumber" class="mb-2 font-bold text-sm text-gray-700">Flight Number</label>
-        <div class="relative">
-          <span class="absolute inset-y-0 left-0 flex items-center pl-3">
-            <svg class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
-              <path
-                d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
-            </svg>
-          </span>
-          <input id="flightNumber" v-model="flightNumber" data-testid="flight-number-input" placeholder="e.g. WS3041"
-            class="pl-10 pr-4 py-2 w-full border rounded-md h-10">
-        </div>
-      </div>
-      <!-- Date Input -->
-      <div class="flex flex-col">
-        <label for="date" class="mb-2 font-bold text-sm text-gray-700">Date</label>
-        <div class="relative">
-          <span class="absolute inset-y-0 left-0 flex items-center pl-3">
-            <svg class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
-              <path fill-rule="evenodd"
-                d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
-                clip-rule="evenodd" />
-            </svg>
-          </span>
-          <input id="date" type="date" v-model="date" class="pl-10 pr-4 py-2 w-full border rounded-md h-10">
-        </div>
-      </div>
-      <!-- Search Button -->
-      <div class="flex flex-col">
-        <label class="mb-2 font-bold text-sm text-gray-700 invisible">Search</label>
-        <button @click="searchFlight" data-testid="search-button"
-          class="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition duration-300 h-10">
-          SEARCH FLIGHT
-        </button>
-      </div>
-    </div>
+    </form>
 
     <!-- Loading Indicator -->
     <div v-if="isLoading" class="flex justify-center items-center my-8">
@@ -243,7 +245,9 @@ export default {
     };
   },
   methods: {
-    async searchFlight() {
+    async searchFlight(event) {
+      if (event) event.preventDefault();
+
       this.searched = true;
       this.isLoading = true;
       this.usingCachedData = false;
