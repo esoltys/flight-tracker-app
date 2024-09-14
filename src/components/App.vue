@@ -63,16 +63,7 @@
 
     <!-- Loading Indicator -->
     <div v-if="isLoading" class="flex justify-center items-center my-8">
-      <svg class="h-40 w-40" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="50" cy="50" r="40" fill="none" stroke="#e0e0e0" stroke-width="2" />
-        <path id="motionPath" d="M50,10 A40,40 0 1,1 50,90 A40,40 0 1,1 50,10" fill="none" />
-        <g class="airplane">
-          <path fill="#3b82f6" d="M-15,-6 L15,0 L-15,6 L-9,0 Z" />
-          <animateMotion dur="3s" repeatCount="indefinite" rotate="auto">
-            <mpath href="#motionPath" />
-          </animateMotion>
-        </g>
-      </svg>
+      <div class="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12"></div>
     </div>
 
     <!-- Error Message -->
@@ -363,3 +354,20 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.loader {
+  border-top-color: #3498db;
+  animation: spinner 1.5s linear infinite;
+}
+
+@keyframes spinner {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+</style>
